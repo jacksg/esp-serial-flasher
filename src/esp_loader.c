@@ -18,7 +18,7 @@
 #include "serial_io.h"
 #include "esp_loader.h"
 #include "esp_targets.h"
-#include "md5_hash.h"
+#include "md5_hash_flash.h"
 #include <string.h>
 #include <assert.h>
 
@@ -46,7 +46,7 @@ static target_chip_t s_target = ESP_UNKNOWN_CHIP;
 #if MD5_ENABLED
 
 static const uint32_t MD5_TIMEOUT_PER_MB = 800;
-static struct MD5Context s_md5_context;
+static struct MD5Context_ESP_Flasher s_md5_context;
 static uint32_t s_start_address;
 static uint32_t s_image_size;
 
@@ -54,17 +54,17 @@ static inline void init_md5(uint32_t address, uint32_t size)
 {
     s_start_address = address;
     s_image_size = size;
-    MD5Init(&s_md5_context);
+    MD5Init_ESP_Flasher(&s_md5_context);
 }
 
 static inline void md5_update(const uint8_t *data, uint32_t size)
 {
-    MD5Update(&s_md5_context, data, size);
+    MD5Update_ESP_Flasher(&s_md5_context, data, size);
 }
 
 static inline void md5_final(uint8_t digets[16])
 {
-    MD5Final(digets, &s_md5_context);
+    MD5Final_ESP_Flasher(digets, &s_md5_context);
 }
 
 #else

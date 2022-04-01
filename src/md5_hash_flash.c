@@ -7,7 +7,7 @@
  */
 
 
-#include "md5_hash.h"
+#include "md5_hash_flash.h"
 #include <stdlib.h>
 #include <string.h>
 
@@ -28,8 +28,8 @@ static void MD5Transform(uint32_t buf[4], uint32_t const in[16]);
  * with every copy.
  *
  * To compute the message digest of a chunk of bytes, declare an
- * MD5Context structure, pass it to MD5Init, call MD5Update as
- * needed on buffers full of bytes, and then call MD5Final, which
+ * MD5Context_ESP_Flasher structure, pass it to MD5Init_ESP_Flasher, call MD5Update_ESP_Flasher as
+ * needed on buffers full of bytes, and then call MD5Final_ESP_Flasher, which
  * will fill a supplied 16-byte array with the digest.
  */
 
@@ -55,7 +55,7 @@ static void byteReverse(unsigned char *buf, unsigned longs)
  * Start MD5 accumulation.  Set bit count to 0 and buffer to mysterious
  * initialization constants.
  */
-void MD5Init(struct MD5Context *ctx)
+void MD5Init_ESP_Flasher(struct MD5Context_ESP_Flasher *ctx)
 {
     ctx->buf[0] = 0x67452301;
     ctx->buf[1] = 0xefcdab89;
@@ -70,7 +70,7 @@ void MD5Init(struct MD5Context *ctx)
  * Update context to reflect the concatenation of another buffer full
  * of bytes.
  */
-void MD5Update(struct MD5Context *ctx, unsigned char const *buf, unsigned len)
+void MD5Update_ESP_Flasher(struct MD5Context_ESP_Flasher *ctx, unsigned char const *buf, unsigned len)
 {
     uint32_t t;
 
@@ -119,7 +119,7 @@ void MD5Update(struct MD5Context *ctx, unsigned char const *buf, unsigned len)
  * Final wrapup - pad to 64-byte boundary with the bit pattern
  * 1 0* (64-bit count of bits processed, MSB-first)
  */
-void MD5Final(unsigned char digest[16], struct MD5Context *ctx)
+void MD5Final_ESP_Flasher(unsigned char digest[16], struct MD5Context_ESP_Flasher *ctx)
 {
     unsigned count;
     unsigned char *p;
@@ -157,7 +157,7 @@ void MD5Final(unsigned char digest[16], struct MD5Context *ctx)
     MD5Transform((uint32_t *)ctx->buf, (uint32_t *) ctx->in);
     byteReverse((unsigned char *) ctx->buf, 4);
     memcpy(digest, ctx->buf, 16);
-    memset(ctx, 0, sizeof(struct MD5Context));  /* In case it's sensitive */
+    memset(ctx, 0, sizeof(struct MD5Context_ESP_Flasher));  /* In case it's sensitive */
 }
 
 /* The four core functions - F1 is optimized somewhat */
@@ -174,7 +174,7 @@ void MD5Final(unsigned char digest[16], struct MD5Context *ctx)
 
 /*
  * The core of the MD5 algorithm, this alters an existing MD5 hash to
- * reflect the addition of 16 longwords of new data.  MD5Update blocks
+ * reflect the addition of 16 longwords of new data.  MD5Update_ESP_Flasher blocks
  * the data and converts bytes into longwords for this routine.
  */
 static void MD5Transform(uint32_t buf[4], uint32_t const in[16])
